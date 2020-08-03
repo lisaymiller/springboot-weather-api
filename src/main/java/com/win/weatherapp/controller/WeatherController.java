@@ -1,7 +1,10 @@
 package com.win.weatherapp.controller;
 
+import java.util.List;
+
 import com.win.weatherapp.model.Request;
 import com.win.weatherapp.model.Response;
+import com.win.weatherapp.model.Zipcode;
 import com.win.weatherapp.service.WeatherService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +21,18 @@ public class WeatherController {
 
     @GetMapping
     public String getIndex(Model model) {
+        List<Zipcode> zipCodeList = weatherService.getRecentSearches();
         model.addAttribute("request", new Request());
+        model.addAttribute("zip_codes", zipCodeList);
         return "index";
     }
 
     @PostMapping
     public String postIndex(Request request, Model model) {
+        List<Zipcode> zipCodeList = weatherService.getRecentSearches();
         Response data = weatherService.getForecast(request.getZipCode());
         model.addAttribute("data", data);
+        model.addAttribute("zip_codes", zipCodeList);
         return "index";
     }
 }
